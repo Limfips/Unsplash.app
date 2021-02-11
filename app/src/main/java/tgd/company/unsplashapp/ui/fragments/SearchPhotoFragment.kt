@@ -2,6 +2,7 @@ package tgd.company.unsplashapp.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,8 +70,8 @@ class SearchPhotoFragment @Inject constructor(
         setupRecyclerView()
         subscribeToObservers()
 
-        binding.btnPrev.isClickable = currentPage != 1
-        binding.btnNext.isClickable = currentPage != lastPage
+        binding.btnPrev.isClickable = currentPage != 0 && lastPage != 0
+        binding.btnNext.isClickable = currentPage != lastPage && lastPage != 0
 
         binding.btnPrev.setOnClickListener {
             currentPage--
@@ -109,18 +110,24 @@ class SearchPhotoFragment @Inject constructor(
     private fun subscribeToObservers() {
         viewModel.searchPhotos.observe(viewLifecycleOwner) { event ->
             event?.getContentIfNotHandled()?.let { result ->
+                Log.w("SPF_TAG", result.toString())
                 when(result.status) {
                     Status.SUCCESS -> {
                         val photos = result.data?.results
-                        lastPage = result.data?.total_pages ?: 1
+                        lastPage = result.data?.total_pages ?: 0
                         photosAdapter.photos = photos ?: listOf()
-                        binding.progressBar.visibility = View.GONE
+                        binding.pbSearchPhotos.visibility = View.GONE
 
+                        if (lastPage == 0) {
+                            binding.tvNotFound.visibility = View.VISIBLE
+                        } else {
+                            binding.tvNotFound.visibility = View.INVISIBLE
+                        }
 
                         binding.tvCurrentPage.text = "$currentPage / $lastPage"
 
                         binding.btnPrev.isClickable = currentPage != 1
-                        binding.btnNext.isClickable = currentPage != lastPage
+                        binding.btnNext.isClickable = currentPage != lastPage && lastPage != 0
                         photosAdapter.notifyDataSetChanged()
                     }
                     Status.ERROR -> {
@@ -129,10 +136,10 @@ class SearchPhotoFragment @Inject constructor(
                             result.message ?: "An unknown error occured.",
                             Snackbar.LENGTH_LONG
                         ).show()
-                        binding.progressBar.visibility = View.GONE
+                        binding.pbSearchPhotos.visibility = View.GONE
                     }
                     Status.LOADING -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.pbSearchPhotos.visibility = View.VISIBLE
                     }
                 }
             }

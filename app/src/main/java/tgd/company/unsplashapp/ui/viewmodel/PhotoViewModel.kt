@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import tgd.company.unsplashapp.data.colection.Collection
 import tgd.company.unsplashapp.data.photo.Photo
 import tgd.company.unsplashapp.data.search.SearchResult
 import tgd.company.unsplashapp.other.Event
@@ -57,5 +58,32 @@ class PhotoViewModel @Inject constructor(
         }
     }
 
+    private val _collections = MutableLiveData<Event<Resource<List<Collection>>>>()
+    val collections: LiveData<Event<Resource<List<Collection>>>> = _collections
 
+    fun getCollections(page: Int) {
+        _collections.value = Event(Resource.loading(null))
+        viewModelScope.launch {
+            val response = photoRepository.getCollections(page)
+            _collections.value = Event(response)
+        }
+    }
+
+    private val _selectedCollection = MutableLiveData<Collection?>()
+    val selectedCollection: LiveData<Collection?> = _selectedCollection
+
+    fun setSelectedCollection(collection: Collection?) {
+        _selectedCollection.postValue(collection)
+    }
+
+    private val _photoForCollections = MutableLiveData<Event<Resource<List<Photo>>>>()
+    val photoForCollections: LiveData<Event<Resource<List<Photo>>>> = _photoForCollections
+
+    fun getPhotosForCollections(page: Int) {
+        _photoForCollections.value = Event(Resource.loading(null))
+        viewModelScope.launch {
+            val response = photoRepository.getCollectionPhotos(selectedCollection.value!!.id, page)
+            _photoForCollections.value = Event(response)
+        }
+    }
 }
