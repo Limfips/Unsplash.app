@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Unsplash.app</string>
+    
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="i_will_be_lucky_text">Мне повезёт!</string>
+    <string name="FloatingActionButton">FloatingActionButton_desc</string>
+    <string name="search">Search</string>
+    <string name="content_description_search">content_description_search</string>
+    <string name="details">Подробнее</string>
+    <string name="content_description_details" />
+    <string name="content_description_collections" />
+    <string name="collections">collections</string>
+    <string name="helper">Helper</string>
+    <string name="prev">prev</string>
+    <string name="next">next</string>
+    <string name="search_for_images">Search for Images...</string>
+    <string name="_1_1">1 / 1</string>
+    <string name="itemPhotoDescription">ItemPhotoDescription</string>
 </resources>
