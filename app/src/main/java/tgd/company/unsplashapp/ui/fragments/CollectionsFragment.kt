@@ -49,5 +49,7 @@ class CollectionsFragment @Inject constructor(
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+
+
     }
 }

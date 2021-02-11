@@ -11,10 +11,10 @@ import tgd.company.unsplashapp.R
 import tgd.company.unsplashapp.data.photo.Photo
 import javax.inject.Inject
 
-class ImageAdapter @Inject constructor(
+class PhotosAdapter @Inject constructor(
     private val glide: RequestManager
-): RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
-    class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+): RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder>() {
+    class PhotoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Photo>() {
         override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
@@ -28,12 +28,12 @@ class ImageAdapter @Inject constructor(
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    var images: List<Photo>
+    var photos: List<Photo>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        return ImageViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
+        return PhotoViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_photo,
                 parent,
@@ -47,20 +47,20 @@ class ImageAdapter @Inject constructor(
         onItemClickListener = listener
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val image = images[position]
+    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+        val photo = photos[position]
         holder.itemView.apply {
-            glide.load(image.urls.small).into(findViewById(R.id.ivItemPhoto))
+            glide.load(photo.urls.small).into(findViewById(R.id.ivItemPhoto))
 
             setOnClickListener {
                 onItemClickListener?.let { click ->
-                    click(image)
+                    click(photo)
                 }
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return images.size
+        return photos.size
     }
 }

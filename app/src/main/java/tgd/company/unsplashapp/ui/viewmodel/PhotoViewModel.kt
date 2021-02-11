@@ -12,7 +12,6 @@ import tgd.company.unsplashapp.data.photo.Photo
 import tgd.company.unsplashapp.data.search.SearchResult
 import tgd.company.unsplashapp.other.Event
 import tgd.company.unsplashapp.other.Resource
-import tgd.company.unsplashapp.other.Status
 import tgd.company.unsplashapp.service.repository.IPhotoRepository
 import javax.inject.Inject
 
@@ -21,10 +20,17 @@ class PhotoViewModel @Inject constructor(
     private val photoRepository: IPhotoRepository
 ): ViewModel() {
 
-    var closeBehavior: (() -> Boolean)? = null
-
     @SuppressLint("StaticFieldLeak")
     var fab: FloatingActionButton? = null
+
+    var closeBehavior: (() -> Boolean)? = null
+
+    private val _selectedPhoto = MutableLiveData<Photo?>()
+    val selectedPhoto: LiveData<Photo?> = _selectedPhoto
+
+    fun setSelectedPhoto(photo: Photo?) {
+        _selectedPhoto.postValue(photo)
+    }
 
     private val _randomPhoto = MutableLiveData<Event<Resource<Photo>>>()
     val randomPhoto: LiveData<Event<Resource<Photo>>> = _randomPhoto
@@ -37,26 +43,17 @@ class PhotoViewModel @Inject constructor(
         }
     }
 
-    private val _selectedPhoto = MutableLiveData<Photo?>()
-    val selectedPhoto: LiveData<Photo?> = _selectedPhoto
-
-    fun setSelectedPhoto(photo: Photo?) {
-        _selectedPhoto.postValue(photo)
-    }
-
-
-
-    private val _images = MutableLiveData<Event<Resource<SearchResult>>>()
-    val images: LiveData<Event<Resource<SearchResult>>> = _images
+    private val _searchPhotos = MutableLiveData<Event<Resource<SearchResult>>>()
+    val searchPhotos: LiveData<Event<Resource<SearchResult>>> = _searchPhotos
 
     fun searchPhoto(query: String, page: Int) {
         if (query.isEmpty()) {
             return
         }
-        _images.value = Event(Resource.loading(null))
+        _searchPhotos.value = Event(Resource.loading(null))
         viewModelScope.launch {
             val response = photoRepository.searchPhoto(query, page)
-            _images.value = Event(response)
+            _searchPhotos.value = Event(response)
         }
     }
 

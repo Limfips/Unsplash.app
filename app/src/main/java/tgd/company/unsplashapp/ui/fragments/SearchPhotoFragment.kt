@@ -12,8 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,15 +21,14 @@ import tgd.company.unsplashapp.databinding.FragmentSearchPhotoBinding
 import tgd.company.unsplashapp.other.Constants.GRID_SPAN_COUNT
 import tgd.company.unsplashapp.other.Constants.SEARCH_TIME_DELAY
 import tgd.company.unsplashapp.other.Status
-import tgd.company.unsplashapp.service.adapter.ImageAdapter
+import tgd.company.unsplashapp.service.adapter.PhotosAdapter
 import tgd.company.unsplashapp.ui.viewmodel.PhotoViewModel
 import javax.inject.Inject
 
 
 // •Поиск фотографий по ключевым словам;
 class SearchPhotoFragment @Inject constructor(
-    private val glide: RequestManager,
-    private val imageAdapter: ImageAdapter
+    private val photosAdapter: PhotosAdapter
 ) : Fragment(R.layout.fragment_search_photo) {
 
     private lateinit var viewModel: PhotoViewModel
@@ -103,20 +100,20 @@ class SearchPhotoFragment @Inject constructor(
             }
         }
 
-        imageAdapter.setOnItemClickListener {
+        photosAdapter.setOnItemClickListener {
             viewModel.setSelectedPhoto(it)
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun subscribeToObservers() {
-        viewModel.images.observe(viewLifecycleOwner) { event ->
+        viewModel.searchPhotos.observe(viewLifecycleOwner) { event ->
             event?.getContentIfNotHandled()?.let { result ->
                 when(result.status) {
                     Status.SUCCESS -> {
-                        val images = result.data?.results
+                        val photos = result.data?.results
                         lastPage = result.data?.total_pages ?: 1
-                        imageAdapter.images = images ?: listOf()
+                        photosAdapter.photos = photos ?: listOf()
                         binding.progressBar.visibility = View.GONE
 
 
@@ -124,7 +121,7 @@ class SearchPhotoFragment @Inject constructor(
 
                         binding.btnPrev.isClickable = currentPage != 1
                         binding.btnNext.isClickable = currentPage != lastPage
-                        imageAdapter.notifyDataSetChanged()
+                        photosAdapter.notifyDataSetChanged()
                     }
                     Status.ERROR -> {
                         Snackbar.make(
@@ -144,7 +141,7 @@ class SearchPhotoFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         binding.rvImages.apply {
-            adapter = imageAdapter
+            adapter = photosAdapter
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
         }
     }

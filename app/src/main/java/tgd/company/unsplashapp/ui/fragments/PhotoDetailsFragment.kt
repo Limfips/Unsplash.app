@@ -1,5 +1,6 @@
 package tgd.company.unsplashapp.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -41,13 +42,17 @@ class PhotoDetailsFragment @Inject constructor(
         _binding = null
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(PhotoViewModel::class.java)
 
         viewModel.selectedPhoto.observe(viewLifecycleOwner) {
             it?.let {
-//                binding.tvTest.text = it.toString()
+                binding.tvWidth.text = "Width: ${it.width}"
+                binding.tvHeight.text = "Height: ${it.height}"
+                binding.tvDescription.text = "Description: ${it.description}"
+                binding.tvUrl.text = "Url: ${it.urls.full}"
             }
         }
     }

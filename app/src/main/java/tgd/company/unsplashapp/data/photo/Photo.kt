@@ -5,5 +5,5 @@ data class Photo(
     val urls: Urls,
     val width: Int,
     val height: Int,
-    val current_user_collections: List<CurrentUserCollection>
+    val description: String
 )
