@@ -52,6 +52,7 @@ class CollectionDetailsFragment @Inject constructor(
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (!viewModel.closeBehavior!!.invoke()) {
+                    photosAdapter.clear()
                     findNavController().popBackStack()
                 }
             }
@@ -60,7 +61,15 @@ class CollectionDetailsFragment @Inject constructor(
 
         setupRecyclerView()
         subscribeToObservers()
+        settingBtnNavigation()
 
+        viewModel.getPhotosForCollections(currentPage)
+        photosAdapter.setOnItemClickListener {
+            viewModel.setSelectedPhoto(it)
+        }
+    }
+
+    private fun settingBtnNavigation() {
         binding.btnPrevForCollection.isClickable = currentPage != 1
 
         binding.btnPrevForCollection.setOnClickListener {
@@ -73,11 +82,6 @@ class CollectionDetailsFragment @Inject constructor(
             currentPage++
 
             viewModel.getCollections(currentPage)
-        }
-
-        viewModel.getPhotosForCollections(currentPage)
-        photosAdapter.setOnItemClickListener {
-            viewModel.setSelectedPhoto(it)
         }
     }
 

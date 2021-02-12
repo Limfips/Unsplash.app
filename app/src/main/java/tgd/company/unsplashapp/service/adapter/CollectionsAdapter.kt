@@ -28,6 +28,10 @@ class CollectionsAdapter @Inject constructor(
         }
     }
 
+    fun clear() {
+        collections = listOf()
+    }
+
     private val differ = AsyncListDiffer(this, diffCallback)
 
     var collections: List<Collection>

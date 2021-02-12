@@ -26,6 +26,10 @@ class PhotosAdapter @Inject constructor(
         }
     }
 
+    fun clear() {
+        photos = listOf()
+    }
+
     private val differ = AsyncListDiffer(this, diffCallback)
 
     var photos: List<Photo>

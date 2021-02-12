@@ -60,7 +60,20 @@ class CollectionsFragment @Inject constructor(
 
         setupRecyclerView()
         subscribeToObservers()
+        settingBtnNavigation()
 
+
+
+        viewModel.getCollections(currentPage)
+        collectionsAdapter.setOnItemClickListener {
+            viewModel.setSelectedCollection(it)
+            findNavController().navigate(
+                    CollectionsFragmentDirections.actionCollectionsFragmentToCollectionDetailsFragment()
+            )
+        }
+    }
+
+    private fun settingBtnNavigation() {
         binding.btnPrev.isClickable = currentPage != 1
 
         binding.btnPrev.setOnClickListener {
@@ -73,14 +86,6 @@ class CollectionsFragment @Inject constructor(
             currentPage++
 
             viewModel.getCollections(currentPage)
-        }
-
-        viewModel.getCollections(currentPage)
-        collectionsAdapter.setOnItemClickListener {
-            viewModel.setSelectedCollection(it)
-            findNavController().navigate(
-                    CollectionsFragmentDirections.actionCollectionsFragmentToCollectionDetailsFragment()
-            )
         }
     }
 

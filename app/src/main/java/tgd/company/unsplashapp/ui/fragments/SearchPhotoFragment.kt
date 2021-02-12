@@ -61,6 +61,7 @@ class SearchPhotoFragment @Inject constructor(
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (!viewModel.closeBehavior!!.invoke()) {
+                    photosAdapter.clear()
                     findNavController().popBackStack()
                 }
             }
@@ -69,21 +70,7 @@ class SearchPhotoFragment @Inject constructor(
 
         setupRecyclerView()
         subscribeToObservers()
-
-        binding.btnPrev.isClickable = currentPage != 0 && lastPage != 0
-        binding.btnNext.isClickable = currentPage != lastPage && lastPage != 0
-
-        binding.btnPrev.setOnClickListener {
-            currentPage--
-
-            viewModel.searchPhoto(searchQuery, currentPage)
-        }
-
-        binding.btnNext.setOnClickListener {
-            currentPage++
-
-            viewModel.searchPhoto(searchQuery, currentPage)
-        }
+        settingBtnNavigation()
 
         var job: Job? = null
         binding.etSearch.addTextChangedListener { editable ->
@@ -103,6 +90,23 @@ class SearchPhotoFragment @Inject constructor(
 
         photosAdapter.setOnItemClickListener {
             viewModel.setSelectedPhoto(it)
+        }
+    }
+
+    private fun settingBtnNavigation() {
+        binding.btnPrev.isClickable = currentPage != 0 && lastPage != 0
+        binding.btnNext.isClickable = currentPage != lastPage && lastPage != 0
+
+        binding.btnPrev.setOnClickListener {
+            currentPage--
+
+            viewModel.searchPhoto(searchQuery, currentPage)
+        }
+
+        binding.btnNext.setOnClickListener {
+            currentPage++
+
+            viewModel.searchPhoto(searchQuery, currentPage)
         }
     }
 
