@@ -9,12 +9,13 @@
     <string name="details">Details</string>
     <string name="content_description_details" />
     <string name="content_description_collections" />
-    <string name="collections">collections</string>
+    <string name="collections">Collections</string>
     <string name="helper">Helper</string>
-    <string name="prev">prev</string>
-    <string name="next">next</string>
-    <string name="search_for_images">Search for Images…</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
+    <string name="search_for_photos">Search for Photos…</string>
     <string name="_1_1">1 / 1</string>
     <string name="itemPhotoDescription">ItemPhotoDescription</string>
     <string name="not_found">Not found!</string>
+    <string name="collection_details">Collection Details</string>
 </resources>
