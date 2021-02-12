@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/randomPhotoFragment"
+    android:id="@+id/nav_graph.xml">
+    <fragment
+        android:id="@+id/collectionsFragment"
+        android:name="tgd.company.unsplashapp.ui.fragments.CollectionsFragment"
+        android:label="fragment_collections"
+        tools:layout="@layout/fragment_collections" >
+        <action
+            android:id="@+id/action_collectionsFragment_to_collectionDetailsFragment"
+            app:destination="@id/collectionDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionDetailsFragment"
+        android:name="tgd.company.unsplashapp.ui.fragments.CollectionDetailsFragment"
+        android:label="fragment_collection_details"
+        tools:layout="@layout/fragment_collection_details" />
+    <fragment
+        android:id="@+id/searchPhotoFragment"
+        android:name="tgd.company.unsplashapp.ui.fragments.SearchPhotoFragment"
+        android:label="fragment_search_photo"
+        tools:layout="@layout/fragment_search_photo" />
+    <fragment
+        android:id="@+id/randomPhotoFragment"
+        android:name="tgd.company.unsplashapp.ui.fragments.RandomPhotoFragment"
+        android:label="RandomPhotoFragment" >
+        <action
+            android:id="@+id/action_randomPhotoFragment_to_collectionsFragment"
+            app:destination="@id/collectionsFragment" />
+        <action
+            android:id="@+id/action_randomPhotoFragment_to_collectionDetailsFragment"
+            app:destination="@id/collectionDetailsFragment" />
+        <action
+            android:id="@+id/action_randomPhotoFragment_to_searchPhotoFragment"
+            app:destination="@id/searchPhotoFragment" />
+    </fragment>
+</navigation>
